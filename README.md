@@ -1,7 +1,7 @@
-### play-helloworld-app
+###### play-helloworld-app
 - 우리의 플레이 그라운드 프로젝트
 
-> 기능
+### 기능
 - 인증
 - 소셜 인증
 
@@ -12,13 +12,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
