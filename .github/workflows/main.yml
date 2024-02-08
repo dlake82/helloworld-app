@@ -13,18 +13,34 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v3
 
-      - name: Use Node.js version 20.x
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
+          node-version: 16
 
-      - name: yarn deploy
-        env:
-          NEXT_PUBLIC_API_URL: http://api.play-helloworld.com
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
         run: |
-          npm install -g pnpm
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        env:
+          NEXT_BASE_URL: http://api.play-helloworld.com
+        run: |
           pnpm install
           pnpm build
 
