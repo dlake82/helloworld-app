@@ -1,4 +1,4 @@
-name: Deploy play-helloworld
+name: Deploy play-helloworld-app
 
 on:
   push:
