@@ -1,0 +1,50 @@
+name: Deploy play-helloworld
+
+on:
+  push:
+    branches: main
+env:
+    BUCKET_NAME: ${{ secrets.BUCKET_NAME}}
+    CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js version 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: yarn deploy
+        env:
+          NEXT_PUBLIC_API_URL: http://api.play-helloworld.com
+        run: |
+          npm install -g pnpm
+          pnpm install
+          pnpm build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to S3
+        env:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 rm s3://$BUCKET_NAME --recursive
+          aws s3 cp --recursive --region ap-northeast-2 ./out s3://$BUCKET_NAME
+
+      - name: Clear Cache to Cloudfront
+        env:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
