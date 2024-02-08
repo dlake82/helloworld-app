@@ -7,7 +7,7 @@ env:
     BUCKET_NAME: ${{ secrets.BUCKET_NAME}}
     CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Git Checkout
