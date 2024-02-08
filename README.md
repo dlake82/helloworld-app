@@ -1,3 +1,10 @@
+### play-helloworld-app
+- 우리의 플레이 그라운드 프로젝트
+
+> 기능
+- 인증
+- 소셜 인증
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
