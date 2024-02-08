@@ -1,7 +1,7 @@
-###### play-helloworld-app
+# play-helloworld-app
 - 우리의 플레이 그라운드 프로젝트
 
-### 기능
+## 기능
 - 인증
 - 소셜 인증
 
